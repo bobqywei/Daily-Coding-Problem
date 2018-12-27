@@ -25,15 +25,18 @@ int lowestMissingNum(int arr[], int size) {
 
 	int start = moveNegToFront(arr, size);
 
+	// Use the array itself to track which positive numbers are present
 	for (int i = start; i < size; i++) {
 		int index = abs(arr[i]) - 1 + start;
 		if (index < size && arr[index] > 0) arr[index] *= -1;
 	}
 
+	// Return first missing number (index where value is positive)
 	for (int i = start; i < size; i++) {
 		if (arr[i] > 0) return i - start + 1;
 	}
 
+	// Return next largest number
 	return size - start + 1;
 }
 
