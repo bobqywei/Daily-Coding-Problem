@@ -79,7 +79,34 @@ public:
 
 	vector<string>* tokenizeString(string s) {
 		vector<string>* tokens = new vector<string>;
-		if (string.length() == 0) return tokens;
+		int len_s = s.length();
+
+		if (len_s == 0) return tokens;
+		if (roots.find(s[0]) == roots.end()) return nullptr;
+
+		Node* curr = roots[s[0]];
+		vector<int>* possibleTokens = curr->findNextToken(s.substr(1, len_s-1));
+
+		if (possibleTokens->size() == 0) return nullptr;
+
+		for (int tokenLength : *possibleTokens) {
+			string remaining = s.substr(tokenLength+1, len_s-1-tokenLength);
+			vector<string>* result = tokenizeString(remaining);
+
+			if (result != nullptr) {
+				tokens->push_back(s.substr(0, tokenLength + 1));
+				for (string token : *result) {
+					tokens->push_back(token);
+				}
+				free(result);
+				return tokens;
+			}
+
+			free(result);
+		}
+
+		free(possibleTokens);
+		return nullptr;
 	}
 };
 
@@ -99,4 +126,17 @@ int main() {
 
 	Trie* dict = new Trie(words);
 
+	while (cin >> in) {
+		vector<string>* tokens = dict->tokenizeString(in);
+
+		if (tokens == nullptr) {
+			cout << "No valid tokenization." << endl;
+		} else {
+			cout << "Tokens: ";
+			for (string s : *tokens) {
+				cout << s << ", ";
+			}
+			cout << endl;
+		}
+	}
 }
