@@ -16,28 +16,33 @@ def create_linked_list(vals):
 
 
 def find_intersecting_node(a, b):
+	# Find length of linked list a
 	len_a = 1
 	temp = a
 	while temp.next is not None:
 		temp = temp.next
 		len_a += 1
 
+	# Find length of linked list b
 	len_b = 1
 	temp = b
 	while temp.next is not None:
 		temp = temp.next
 		len_b += 1
 
+	# Iterates ptr through longer list so that both linked list ptrs are matched up
 	for i in range(abs(len_a - len_b)):
 		if len_a > len_b:
 			a = a.next
 		else:
 			b = b.next
 
+	# Iterate both linked lists at the same time until match
 	while a.val != b.val:
 		a = a.next
 		b = b.next
 
+	# return value of intersecting node
 	return a.val
 
 
