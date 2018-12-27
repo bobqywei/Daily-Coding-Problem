@@ -9,6 +9,7 @@ int minCostPaintHouses(vector<vector<int>> costs) {
 	int k = costs[0].size();
 	int *minCost = new int[k];
 
+	// Only need to track ongoing lowest and second lowest costs
 	int min = 0;
 	int min2 = 0;
 
@@ -20,8 +21,11 @@ int minCostPaintHouses(vector<vector<int>> costs) {
 		min2 = INT_MAX;
 
 		for (int j = 0; j < k; j++) {
+			// Uses either the lowest or second lowest cost from previous house
+			// based on if previous house's colour == j
 			minCost[j] = costs[i][j] + ((minCost[j] != prevMin) ? prevMin : prevMin2);
 
+			// Update the lowest and second lowest costs
 			if (minCost[j] < min) {
 				min2 = min;
 				min = minCost[j];
@@ -30,7 +34,7 @@ int minCostPaintHouses(vector<vector<int>> costs) {
 			}
 		}
 	}
-
+	// Lowest painting cost for the last house is the return value
 	return min;
 }
 
