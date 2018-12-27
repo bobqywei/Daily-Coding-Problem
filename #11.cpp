@@ -31,15 +31,18 @@ public:
 		children[c] = n;
 	}
 
+	// Returns all valid strings under this node
 	vector<string>* getStringsWithPrefix(string prefix) {
 		vector<string>* ret = new vector<string>;
 		for (pair<char, Node*> p : children) {
 			if (p.first == '*') {
 				ret->push_back(prefix);
 			} else {
-				vector<string>* v = p.second->getStringsWithPrefix(prefix + p.first);
-				ret->insert(ret->end(), v->begin(), v->end());
-				free(v);
+				vector<string>* stringsWithPrefix = p.second->getStringsWithPrefix(prefix + p.first);
+				for (string validStr : *stringsWithPrefix) {
+					ret->push_back(validStr);
+				}
+				free(stringsWithPrefix);
 			}
 		}
 		return ret;
@@ -77,6 +80,7 @@ public:
 		}
 	}
 
+	// Returns all matches for given string
 	vector<string>* queryString(string s) {
 		if (roots.find(s[0]) == roots.end()) return new vector<string>;
 
