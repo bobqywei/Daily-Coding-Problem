@@ -8,6 +8,7 @@ unordered_map<int, long> memo;
 
 long countWays(int n) {
 	if (memo.find(n) != memo.end()) return memo[n];
+
 	long ret;
 	if (n == 1) {
 		ret = 1;
@@ -16,6 +17,7 @@ long countWays(int n) {
 	} else {
 		ret = countWays(n-1) + countWays(n-2);
 	}
+	
 	memo[n] = ret;
 	return memo[n];
 }
