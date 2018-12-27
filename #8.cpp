@@ -13,27 +13,25 @@ public:
 	}
 };
 
+// At each node must return whether tree under node is unival
+// and the number of unival trees under
 pair<bool, int> getUnivalTrees(TreeNode* t) {
 	if (t->left == nullptr && t->right == nullptr) {
-
 		return make_pair(true, 1);
 
 	} else if (t->left == nullptr) {
-
 		pair<bool, int> p = getUnivalTrees(t->right);
 
 		if (p.first && t->value == t->right->value) return make_pair(true, p.second + 1);
 		else return make_pair(false, p.second);
 
 	} else if (t->right == nullptr) {
-
 		pair<bool, int> p = getUnivalTrees(t->left);
 
 		if (p.first && t->value == t->left->value) return make_pair(true, p.second + 1);
 		else return make_pair(false, p.second);
 
 	} else {
-
 		pair<bool, int> left = getUnivalTrees(t->left);
 		pair<bool, int> right = getUnivalTrees(t->right);
 
@@ -42,7 +40,6 @@ pair<bool, int> getUnivalTrees(TreeNode* t) {
 		} else {
 			return make_pair(false, left.second + right.second);
 		}
-
 	}
 }
 
