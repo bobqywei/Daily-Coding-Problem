@@ -22,12 +22,14 @@ pair<bool, int> getUnivalTrees(TreeNode* t) {
 	} else if (t->left == nullptr) {
 		pair<bool, int> p = getUnivalTrees(t->right);
 
+		// Check if current tree is unival
 		if (p.first && t->value == t->right->value) return make_pair(true, p.second + 1);
 		else return make_pair(false, p.second);
 
 	} else if (t->right == nullptr) {
 		pair<bool, int> p = getUnivalTrees(t->left);
 
+		// Check if current tree is unival
 		if (p.first && t->value == t->left->value) return make_pair(true, p.second + 1);
 		else return make_pair(false, p.second);
 
@@ -36,8 +38,10 @@ pair<bool, int> getUnivalTrees(TreeNode* t) {
 		pair<bool, int> right = getUnivalTrees(t->right);
 
 		if (left.first && right.first && t->value == t->right->value && t->value == t->left->value) {
+			// Both branches and current tree are all unival
 			return make_pair(true, left.second + right.second + 1);
 		} else {
+			// Sum number of unival subtrees from both branches
 			return make_pair(false, left.second + right.second);
 		}
 	}
