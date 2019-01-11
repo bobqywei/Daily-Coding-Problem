@@ -5,7 +5,7 @@
 #include <sstream>
 using namespace std;
 
-// Always track the largest sum including and exluding the previous value
+// At each iteration, track the largest sum including and excluding the previous value
 int largestNonAdjacentSum(vector<int> &v) {
 	int sumExcl = 0;
 	int sumIncl = v[0];
