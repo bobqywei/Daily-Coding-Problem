@@ -1,4 +1,5 @@
 #include <iostream>
+#include <limits.h>
 
 using namespace std;
 
@@ -13,18 +14,23 @@ struct Node {
 	}
 };
 
-bool isValidBST(Node* root) {
+bool isValidBST(Node* root, int max, int min) {
+	if (root->val > max || root->val < min) {
+		cout << max << ", " << min << ", " << root->val << ", " << endl; 
+		return false;
+	}
+
 	if (root->right == nullptr && root->left == nullptr) {
 		return true;
 	} else if (root->right == nullptr) {
-		return (root->left->val > root->val) ? false : isValidBST(root->left);
+		return (root->left->val > root->val) ? false : isValidBST(root->left, root->val, min);
 	} else if (root->left == nullptr) {
-		return (root->right->val < root->val) ? false : isValidBST(root->right);
+		return (root->right->val < root->val) ? false : isValidBST(root->right, max, root->val);
 	} else {
 		if (root->right->val < root->val || root->left->val > root->val) 
 			return false;	
 		else
-			return (isValidBST(root->left) & isValidBST(root->right));	
+			return (isValidBST(root->left, root->val, min) & isValidBST(root->right, max, root->val));	
 	}
 }
 
@@ -48,5 +54,5 @@ int main() {
 	n10->right = n14;
 	n14->left = n13;
 
-	cout << ((isValidBST(n8)) ? "Valid" : "Invalid") << endl;
+	cout << ((isValidBST(n8, INT_MAX, INT_MIN)) ? "Valid" : "Invalid") << endl;
 }
