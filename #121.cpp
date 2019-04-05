@@ -1,51 +1,39 @@
 #include<string>
 #include<iostream>
-#include<cstdlib>
 
 using namespace std;
 
-string pad_string(const string& s) {
-	string output = "";
-	for (char c : s) {
-		output += "_";
-		output += c;
-	}
-	output += "_";
-	return output;
-}
-
 bool recursive_check(const string& s, const int num_deletions, int left, int right) {
-	// Palindrome is possible if all characters are verified
-	if (left == -1 and right == s.length()) return true;
+	if (left == right) return true;
 
-	// Check if string can be balanced by removing as many characters as possible
-	int num_left = left + 1;
-	int num_right = s.length() - right;
-	if (min(num_left, num_right) < max(num_left, num_right) - num_deletions*2) return false;
+	for (int i = 0; i < (right-left+1) / 2; i++) {
+		bool no_match = s[left + i] != s[right - i];
 
-	// Continue if current characters match
-	if (left >= 0 && right < s.length() && s[left] == s[right]) 
-		return recursive_check(s, num_deletions, left-1, right+1);
-	// Check if any deletions left over if chars don't match
-	else if (num_deletions == 0) 
-		return false;
-
-	// Try removing chars to left and right
-	bool removeLeft = recursive_check(s, num_deletions-1, left-2, right);
-	bool removeRight = recursive_check(s, num_deletions-1, left, right+2);
-	return removeLeft || removeRight;
+		// Try deleting left and right chars, if deletions still remaining
+		if (no_match && num_deletions > 0)
+			return recursive_check(s, num_deletions - 1, left + i + 1, right - i) ||
+				   recursive_check(s, num_deletions - 1, left + i, right - i - 1);
+		// Not possible if current chars don't match and no deletions remaining
+		else if (no_match && num_deletions == 0)
+			return false; 
+	}
+	
+	return true;
 }
 
-bool can_become_palindrome(string s, const int num_deletions) {
-	if (s.length() <= 1) return true;
-	s = pad_string(s);
-	for (int i = 1; i < s.length(); i++) {
-		if (recursive_check(s, num_deletions, i-1, i+1)) return true;
-	}
-	return false;
+bool can_be_palindrome(const string& s, const int num_deletions) {
+	if (s.length() < 2) return true;
+	return recursive_check(s, num_deletions, 0, s.length() - 1);
 }
 
 int main() {
-	bool result = can_become_palindrome("awatzerrfetawx", 4);
-	cout << (result ? "True" : "False") << endl;
+	string inp;
+	while (cin >> inp) {
+		string s = inp;
+		cin >> inp;
+		int k = stoi(inp);
+
+		bool result = can_be_palindrome(s, k);
+		cout << (result ? "True" : "False") << endl;
+	}
 }
