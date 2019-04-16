@@ -4,17 +4,17 @@
 
 using namespace std;
 
-vector<bool>* generate_sieve(int n) {
-	vector<bool>* isPrime = new vector<bool>;
+vector<bool> generate_sieve(int n) {
+	vector<bool> isPrime;
 	for (int i = 0; i <= n; i++) {
-		isPrime->push_back(true);
+		isPrime.push_back(true);
 	}
 
 	for (int i = 2; i <= n; i++) {
-		if ((*isPrime)[i]) {
+		if (isPrime[i]) {
 			int count = 2 * i;
 			while (count <= n) {
-				(*isPrime)[count] = false;
+				isPrime[count] = false;
 				count += i;
 			}
 		}
@@ -33,12 +33,12 @@ pair<int, int> prime_pair(int n, vector<bool> &sieve) {
 }
 
 int main() {
-	vector<bool>* sieve = generate_sieve(10000000);
+	vector<bool> sieve = generate_sieve(10000000);
 
 	string inp;
 	while (cin >> inp) {
 		int n = stoi(inp);
-		pair<int, int> ret = prime_pair(n, *sieve);
+		pair<int, int> ret = prime_pair(n, sieve);
 
 		if (ret.first == -1)
 			cout << "No possible pair of primes." << endl;
